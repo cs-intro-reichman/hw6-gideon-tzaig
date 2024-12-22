@@ -19,6 +19,16 @@ public class Runigram {
 		image = flippedHorizontally(tinypic);
 		System.out.println();
 		print(image);
+
+		// Tests the Vertical flipping of an image:
+		image = flippedVertically(tinypic);
+		System.out.println();
+		print(image);
+
+		// Tests the gray Scaling of an image:
+		image = grayScaled(tinypic);
+		System.out.println();
+		print(image);
 		
 		//// Write here whatever code you need in order to test your work.
 		//// You can continue using the image array.
@@ -95,9 +105,9 @@ public class Runigram {
 		int hCols = image[0].length;
 		Color[][] horImage = new Color[hRows][hCols];
 
-		for (int i = 0; i < hRows; i ++) {
-			for (int j = 0; j < hCols; j ++) {
-				horImage[i][j] = image[i][hRows - j];
+		for (int i = 0; i < horImage.length; i ++) {
+			for (int j = 0; j < horImage[0].length; j ++) {
+				horImage[i][j] = image[i][(hCols - 1) - j];
 			}
 		}
 		return horImage;
@@ -112,9 +122,9 @@ public class Runigram {
 		int vCols = image[0].length;
 		Color[][] verImage = new Color[vRows][vCols];
 
-		for (int j = 0; j < vCols; j ++){
-			for (int i = 0; i < vRows; i ++) {
-				verImage[i][j] = image[vCols - i][j];
+		for (int j = 0; j < verImage[0].length; j ++){
+			for (int i = 0; i < verImage.length; i ++) {
+				verImage[i][j] = image[(vRows-1) - i][j];
 			}
 		}
 		return verImage;
@@ -125,9 +135,10 @@ public class Runigram {
 	// the three values r = lum, g = lum, b = lum.
 	private static Color luminance(Color pixel) {
 		//// Replace the following statement with your code
-		int lumiRed = (int) (pixel.getRed() * 0.299);
-		int lumiGreen = (int) (pixel.getGreen() * 0.587);
-		int lumiBlue = (int) (pixel.getBlue() * 0.114);
+		
+		int lumiRed = (int) (pixel.getRed() * 0.299 + pixel.getGreen() * 0.587 + pixel.getBlue() * 0.114);
+		int lumiGreen = (int) (pixel.getRed() * 0.299 + pixel.getGreen() * 0.587 + pixel.getBlue() * 0.114);
+		int lumiBlue = (int) (pixel.getRed() * 0.299 + pixel.getGreen() * 0.587 + pixel.getBlue() * 0.114);
 		Color lumiColors = new Color(lumiRed, lumiGreen, lumiBlue);
  		return lumiColors;
 	}
@@ -225,21 +236,17 @@ public class Runigram {
 		}
 
 		// iterates steps
-		for (int k = 0; k <= n; k ++);
+		for (int k = 0; k <= n; k ++) {
 			int step = 0;
 			// starting the morphing sequence
-			for (int i = 0; i < morphedImage.length; i ++) {
-				for (int j = 0; j < morphedImage[i].length; j ++) {
-					// blends every color cell
-					morphedImage[i][j] = blend(source[i][j], target[i][j], (n - step));
-					step ++;
-
-			}
+			morphedImage = blend(source, target, ((n - step)/n));
 
 			// presnting total step
 			Runigram.setCanvas(morphedImage); // TBD - needed? 
 			Runigram.display(morphedImage);
 			StdDraw.pause(500); 
+			
+			step ++;
 		}
 	}
 	
