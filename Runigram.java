@@ -168,14 +168,14 @@ public class Runigram {
 	 */
 	public static Color[][] scaled(Color[][] image, int width, int height) {
 		//// Replace the following statement with your code
-		int orgRows = image.length;
-		int orgCols = image[0].length;
-		Color[][] scaledImage = new Color[width][height];
+		int orgWidth = image[0].length;
+		int orgHeight = image.length;
+		Color[][] scaledImage = new Color[height][width];
 		
 		for (int i = 0; i < scaledImage.length; i ++) {
 			for (int j = 0; j < scaledImage[i].length; j ++) {
 				// scaling every color cell
-				scaledImage[i][j] = image[i*(orgRows/width)][j*(orgCols/height)];
+				scaledImage[i][j] = image[i*orgHeight/height][j*orgWidth/width];
 			}
 		}
 		return scaledImage;
@@ -229,23 +229,23 @@ public class Runigram {
 	public static void morph(Color[][] source, Color[][] target, int n) {
 		//// setting permanent vals
 		Color[][] morphedImage = new Color[source.length][source[0].length];
+		int step = 0;
 		
 		// adjusting target size to source
 		if (source.length != target.length || source[0].length != target[0].length) {
-			target = scaled(target, source.length, source[0].length);
+			target = scaled(target, source[0].length, source.length);
 		}
 
 		// iterates steps
 		for (int k = 0; k <= n; k ++) {
-			int step = 0;
 			// starting the morphing sequence
-			morphedImage = blend(source, target, ((n - step)/n));
+			Double alpha = (double) (n - step)/n;
+			morphedImage = blend(source, target, alpha);
 
 			// presnting total step
 			Runigram.setCanvas(morphedImage); // TBD - needed? 
 			Runigram.display(morphedImage);
 			StdDraw.pause(500); 
-			
 			step ++;
 		}
 	}
